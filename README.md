@@ -12,12 +12,15 @@ What we want to implement:
 
 Stories: 
   -As a gym brother I have always wanted an encyclopedia about steroids so that I know what are my choices before going big. (Written by Jhonny Nagato, 24 yrs old)
-  Priority: Should
-  Estimate: 8
+  -Priority: Should
+  -Estimate: 8
   -I've always searched for a site with a live chat support so that all my questions regarding anabolic steroids are answered within minutes, as time is precious for me. (Written by Yagot Abysni, 41 yrs old)
-  Priority: High to max
-  Estimate: 12
+  -Priority: High to max
+  -Estimate: 12
   -I always searched for such a web store so it will make my life easier and more powerful. (Written by Muss Lessobyg, 32 yrs old)
+  -Priority: max
+  -Estimate: TBC
+  
 As a gym noobie, I wanted a site to research what are anabolic steroids and the differences between them, and this site helped me understand.
 
 Pls let us make a steroide site! 🥹🥹
