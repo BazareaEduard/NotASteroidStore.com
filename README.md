@@ -1,6 +1,9 @@
 # NotASteroidStore.com
 This is certainly not an anabolic steroids store! 😜😜
 
+Bazarea Eduard
+Macoveiciuc Teodor
+
 OK now on a serious note, we do not condone the use of anabolic steroids or other illegal substances. This is just a university project, any resebmlence to any intelectual proprety or illegal sites is just a coincidence. Also, this is more or less a satirical and fun approach to learing to make a web store.
 
 What we want to implement:
