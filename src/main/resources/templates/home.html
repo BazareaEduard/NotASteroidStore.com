@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Example</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" type="text/css"/>
+</head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const productImages = document.querySelectorAll('.product-image');
+
+        productImages.forEach(image => {
+            image.addEventListener('click', () => {
+                const productName = image.getAttribute('data-name');
+                const productPrice = image.getAttribute('data-price');
+                const productImageSrc = image.getAttribute('src');
+
+                const absoluteProductImageSrc = new URL(productImageSrc, window.location.href).href;
+
+                localStorage.setItem('productName', productName);
+                localStorage.setItem('productPrice', productPrice);
+                localStorage.setItem('productImageSrc', productImageSrc);
+
+                window.location.href = 'product';
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const carousels = document.querySelectorAll('.product-carousel');
+
+        carousels.forEach(carousel => {
+            const productItems = Array.from(carousel.querySelectorAll('.product-item'));
+            const prevButton = carousel.closest('section').querySelector('.carousel-button.prev');
+            const nextButton = carousel.closest('section').querySelector('.carousel-button.next');
+            const sliderBar = carousel.closest('section').querySelector('.slider-bar');
+
+            const visibleItems = 4; // Number of visible items
+            const totalItems = productItems.length;
+
+            // Clone first and last few items for infinite effect
+            for (let i = 0; i < visibleItems; i++) {
+                const cloneFirst = productItems[i].cloneNode(true);
+                const cloneLast = productItems[totalItems - 1 - i].cloneNode(true);
+                carousel.appendChild(cloneFirst);
+                carousel.insertBefore(cloneLast, productItems[0]);
+            }
+
+            const allItems = Array.from(carousel.querySelectorAll('.product-item'));
+            let currentIndex = visibleItems;
+
+            function updateCarousel() {
+                const itemWidth = allItems[0].offsetWidth;
+                const gap = 20; // The gap value between items
+                const newPosition = -(currentIndex * (itemWidth + gap));
+                carousel.style.transition = 'transform 0.5s ease-in-out';
+                carousel.style.transform = `translateX(${newPosition}px)`;
+
+                if (sliderBar) {
+                    const percentage = ((currentIndex - visibleItems) / totalItems) * 100;
+                    sliderBar.style.left = `${percentage}%`;
+                }
+            }
+
+            function resetCarousel(newIndex) {
+                const itemWidth = allItems[0].offsetWidth;
+                const gap = 20; // The gap value between items
+                const newPosition = -(newIndex * (itemWidth + gap));
+                carousel.style.transition = 'none';
+                carousel.style.transform = `translateX(${newPosition}px)`;
+                setTimeout(() => {
+                    carousel.style.transition = 'transform 0.5s ease-in-out';
+                }, 50); // Delay to allow the transition property to be reset
+            }
+
+            prevButton.addEventListener('click', () => {
+                currentIndex--;
+                updateCarousel();
+                if (currentIndex < visibleItems) {
+                    setTimeout(() => {
+                        resetCarousel(totalItems + visibleItems - 1);
+                        currentIndex = totalItems + visibleItems - 1;
+                    }, 500); // Delay should match the transition duration
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                currentIndex++;
+                updateCarousel();
+                if (currentIndex >= totalItems + visibleItems) {
+                    setTimeout(() => {
+                        resetCarousel(visibleItems);
+                        currentIndex = visibleItems;
+                    }, 500); // Delay should match the transition duration
+                }
+            });
+
+            // Initialize the carousel position
+            resetCarousel(currentIndex);
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const filterButtons = document.querySelectorAll('.category, .filter');
+        const carousels = document.querySelectorAll('.product-carousel');
+
+        function filterProducts() {
+            const activeType = document.querySelector('.category.active').textContent.toLowerCase();
+            const activeCategory = document.querySelector('.filter.active').textContent.toLowerCase();
+
+            carousels.forEach(carousel => {
+                const productItems = carousel.querySelectorAll('.product-item');
+
+                productItems.forEach(item => {
+                    const itemCategory = item.getAttribute('data-category');
+                    const itemType = item.getAttribute('data-type');
+
+                    if ((activeType === 'all' || itemType === activeType) && (activeCategory === 'all' || itemCategory === activeCategory)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Reset the carousel position after filtering
+                const visibleItems = Array.from(productItems).filter(item => item.style.display !== 'none');
+                let currentIndex = 0;
+
+                function updateCarousel() {
+                    if (visibleItems.length > 0) {
+                        const itemWidth = visibleItems[0].offsetWidth;
+                        const gap = 20; // The gap value between items
+                        const newPosition = -(currentIndex * (itemWidth + gap));
+                        carousel.style.transition = 'transform 0.5s ease-in-out';
+                        carousel.style.transform = `translateX(${newPosition}px)`;
+                    }
+                }
+
+                updateCarousel();
+
+                const prevButton = carousel.closest('section').querySelector('.carousel-button.prev');
+                const nextButton = carousel.closest('section').querySelector('.carousel-button.next');
+
+                prevButton.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateCarousel();
+                    }
+                });
+
+                nextButton.addEventListener('click', () => {
+                    if (currentIndex < visibleItems.length - 4) { // Adjust the 4 based on visible items
+                        currentIndex++;
+                        updateCarousel();
+                    }
+                });
+            });
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('category')) {
+                    document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
+                } else if (button.classList.contains('filter')) {
+                    document.querySelectorAll('.filter').forEach(btn => btn.classList.remove('active'));
+                }
+                button.classList.add('active');
+
+                filterProducts();
+            });
+        });
+
+        filterProducts(); // Initial filter call to set the initial state
+    });
+</script>
+
+<body>
+<header class="newsletter-header">
+    <p>Subscribe to our Newsletter For more reasons to pop your veins full of roids <span>&#8594;</span></p>
+</header>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}" class="nav-item">Home</a>
+        <a th:href="@{/products}" class="nav-item">Products</a>
+    </div>
+    <div class="nav-center">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="logo">
+    </div>
+    <div class="nav-right">
+        <a sec:authorize="!isAuthenticated()" href="/login" class="nav-item">Login</a>
+        <a sec:authorize="!isAuthenticated()" href="/register" class="nav-item">Register</a>
+        <a sec:authorize="isAuthenticated()" href="/logout" class="nav-item">Logout</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin" class="nav-item">Admin</a>
+        <a th:href="@{/cart}" class="nav-item">
+            <img th:src="@{/images/cart.png}" alt="Cart" class="cart-icon">
+        </a>
+        <a th:href="@{/faq}" class="nav-item">Contact Support</a>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="hero-left">
+        <h1>ENHANCE YOUR BODY TO LOOK EXACTLY HOW YOU DREAM!</h1>
+        <p class="quote">"THERE ARE NO BIG PROBLEMS, ONLY BIG WEIGHTS."</p>
+        <p class="description">Choose from our selection of high quality steroids, assuring your success not only at the gym, but with the ladies as well.</p>
+        <div class="buttons">
+            <a th:href="@{/products}" class="btn btn-shop">Shop Now</a>
+            <a th:href="@{/faq}" class="btn btn-contact">Contact Us</a>
+        </div>
+        <div class="features-container">
+            <div class="features">
+                <div class="feature-item">
+                    <p>OVER 20+</p>
+                    <span>Performance Enhancing Drugs</span>
+                </div>
+                <div class="feature-item">
+                    <p>99%</p>
+                    <span>Customer Satisfaction Rate</span>
+                </div>
+                <div class="feature-item">
+                    <p>24/7</p>
+                    <span>Shopping Convenience</span>
+                </div>
+                <div class="feature-item">
+                    <p>30-DAY</p>
+                    <span>Hassle-Free Returns</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-right">
+        <img th:src="@{/images/before after.png}" alt="Before and After" class="hero-image">
+    </div>
+</section>
+
+<section class="product-section">
+    <div class="section-header">
+        <h2>DISCOVER GOOD MERCHANDISE</h2>
+        <p class="products-tag">PRODUCTS</p>
+    </div>
+    <div class="description-container">
+        <p class="description">Dive into a world of anabolics innovation at NotASteroidStore. Our carefully curated PED's bring together the latest trends and timeless classics, ensuring you find the perfect PED for yourself.</p>
+        <a th:href="@{/products}" class="btn btn-view-all">View All Products</a>
+    </div>
+    <div class="filters-container">
+        <div class="category-tabs">
+            <a href="#" class="category active">All</a>
+            <a href="#" class="category">Injectables</a>
+            <a href="#" class="category">Digestables</a>
+        </div>
+        <div class="product-filters">
+            <a href="#" class="filter active">Anabolics</a>
+            <a href="#" class="filter">SARMS</a>
+            <a href="#" class="filter">Peptides</a>
+        </div>
+    </div>
+    <div class="product-carousel-wrapper">
+        <div class="product-carousel">
+            <div class="product-item" data-category="anabolics" data-type="injectables">
+                <img th:src="@{/images/deca.png}" alt="Decadron" class="product-image" data-name="Decadron" data-price="$49.99">
+                <h3>Decadron</h3>
+                <p>$49.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="injectables">
+                <img th:src="@{/images/winstrol.png}" alt="Winstrol" class="product-image" data-name="Winstrol" data-price="$39.99">
+                <h3>Winstrol</h3>
+                <p>$39.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="injectables">
+                <img th:src="@{/images/test.png}" alt="Testosterone" class="product-image" data-name="Testosterone" data-price="$29.99">
+                <h3>Testosterone</h3>
+                <p>$29.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="injectables">
+                <img th:src="@{/images/oxydrol.png}" alt="Oxydrol" class="product-image" data-name="Oxydrol" data-price="$44.99">
+                <h3>Oxydrol</h3>
+                <p>$44.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="injectables">
+                <img th:src="@{/images/boldenone.png}" alt="Oxydrol" class="product-image" data-name="Boldenone" data-price="$24.99">
+                <h3>Boldenone</h3>
+                <p>$24.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="injectables">
+                <img th:src="@{/images/dostranolonepng.png}" alt="Oxydrol" class="product-image" data-name="Dostranolonepng" data-price="$54.99">
+                <h3>Dostranolonepng</h3>
+                <p>$54.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="injectables">
+                <img th:src="@{/images/enblone.png}" alt="Oxydrol" class="product-image" data-name="Enblone" data-price="$59.99">
+                <h3>Enblone</h3>
+                <p>$59.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="injectables">
+                <img th:src="@{/images/equipose.png}" alt="Oxydrol" class="product-image" data-name="Equipose" data-price="$19.99">
+                <h3>Equipose</h3>
+                <p>$19.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="injectables">
+                <img th:src="@{/images/genericInjectable.png}" alt="Oxydrol" class="product-image" data-name="GenericInjectable" data-price="$9.99">
+                <h3>Generic Injectable</h3>
+                <p>$9.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="injectables">
+                <img th:src="@{/images/primobolanpng.png}" alt="Oxydrol" class="product-image" data-name="Primobolanpng" data-price="$44.99">
+                <h3>Primobolanpng</h3>
+                <p>$44.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="injectables">
+                <img th:src="@{/images/profina.png}" alt="Oxydrol" class="product-image" data-name="Profina" data-price="$14.99">
+                <h3>Profina</h3>
+                <p>$14.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="injectables">
+                <img th:src="@{/images/steropropican.png}" alt="Oxydrol" class="product-image" data-name="Steropropican" data-price="$94.99">
+                <h3>Steropropican</h3>
+                <p>$94.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="injectables">
+                <img th:src="@{/images/sustanon.png}" alt="Oxydrol" class="product-image" data-name="Sustanon" data-price="$17.99">
+                <h3>Sustanon</h3>
+                <p>$17.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="injectables">
+                <img th:src="@{/images/tesMix5.png}" alt="Oxydrol" class="product-image" data-name="TesMix5png" data-price="$29.99">
+                <h3>TesMix5png</h3>
+                <p>$29.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="injectables">
+                <img th:src="@{/images/testoE.png}" alt="Oxydrol" class="product-image" data-name="TestoE" data-price="$44.99">
+                <h3>TestoE</h3>
+                <p>$44.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="digestables">
+                <img th:src="@{/images/anavar.png}" alt="Anavar" class="product-image" data-name="Anavar" data-price="$199.99">
+                <h3>Anavar</h3>
+                <p>$199.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="digestables">
+                <img th:src="@{/images/dianabol__01788.png}" alt="Dianabol" class="product-image" data-name="Dianabol" data-price="$39.99">
+                <h3>Dianabol</h3>
+                <p>$39.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="digestables">
+                <img th:src="@{/images/tren.png}" alt="Trenbolone" class="product-image" data-name="Trenbolone" data-price="$89.99">
+                <h3>Trenbolone</h3>
+                <p>$89.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="digestables">
+                <img th:src="@{/images/stanabol.png}" alt="Stanobol" class="product-image" data-name="Stanobol" data-price="$29.99">
+                <h3>Stanobol</h3>
+                <p>$29.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="digestables">
+                <img th:src="@{/images/corticosteroid.png}" alt="Oxydrol" class="product-image" data-name="Corticosteroid" data-price="$24.99">
+                <h3>Corticosteroid</h3>
+                <p>$24.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="digestables">
+                <img th:src="@{/images/dexamethasone.png}" alt="Oxydrol" class="product-image" data-name="Dexamethasone" data-price="$54.99">
+                <h3>Dexamethasone</h3>
+                <p>$54.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="digestables">
+                <img th:src="@{/images/genericedible.png}" alt="Oxydrol" class="product-image" data-name="Genericedible" data-price="$59.99">
+                <h3>Genericedible</h3>
+                <p>$59.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="digestables">
+                <img th:src="@{/images/medrone.png}" alt="Oxydrol" class="product-image" data-name="Medrone" data-price="$19.99">
+                <h3>Medrone</h3>
+                <p>$19.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="digestables">
+                <img th:src="@{/images/methyprednisone.png}" alt="Oxydrol" class="product-image" data-name="Methyprednisone" data-price="$9.99">
+                <h3>Methyprednisone</h3>
+                <p>$9.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="digestables">
+                <img th:src="@{/images/prednidale.png}" alt="Oxydrol" class="product-image" data-name="Prednidale" data-price="$44.99">
+                <h3>Prednidale</h3>
+                <p>$44.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="digestables">
+                <img th:src="@{/images/prednisone.png}" alt="Oxydrol" class="product-image" data-name="Prednisone" data-price="$14.99">
+                <h3>Prednisone</h3>
+                <p>$14.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="peptides" data-type="digestables">
+                <img th:src="@{/images/unleash.png}" alt="Oxydrol" class="product-image" data-name="Unleash" data-price="$94.99">
+                <h3>Unleash the Power</h3>
+                <p>$94.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="anabolics" data-type="digestables">
+                <img th:src="@{/images/boldenone.png}" alt="Oxydrol" class="product-image" data-name="Boldenone" data-price="$24.99">
+                <h3>Boldenone</h3>
+                <p>$24.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+            <div class="product-item" data-category="sarms" data-type="digestables">
+                <img th:src="@{/images/dostranolonepng.png}" alt="Oxydrol" class="product-image" data-name="Dostranolonepng" data-price="$54.99">
+                <h3>Dostranolonepng</h3>
+                <p>$54.99</p>
+                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-button prev"><img th:src="@{/images/back.png}" alt="Previous"></button>
+            <button class="carousel-button next"><img th:src="@{/images/forward.png}" alt="Next"></button>
+        </div>
+    </div>
+</section>
+
+<section class="experience-section">
+    <div class="section-header">
+        <h2>THE NOTASTEROIDSTORE EXPERIENCE.</h2>
+        <p class="experience-tag">ABOUT US</p>
+    </div>
+    <div class="experience-description">
+        <p>At NotASteroidStore, we breathe life into getting you swole and shredded with commitment. Our journey is fueled by a dedication to delivering unparalleled gains and muscle mass. Join us in redefining bodybuilding and embracing a community where every purchase tells a story.</p>
+    </div>
+    <div class="features-container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/passionate.png}" alt="Passionate Craftsmanship">
+                </div>
+                <div class="feature-content">
+                    <h3>Passionate Craftsmanship</h3>
+                    <p>Every PED at NotASteroidStore is crafted with passion, reflecting our commitment to quality and innovation.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/aesthetics.png}" alt="Aesthetics Forward">
+                </div>
+                <div class="feature-content">
+                    <h3>Aesthetics Forward</h3>
+                    <p>We’re more than a brand; we’re trendsetters, curating aesthetics that empower and inspire confidence.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/customer.png}" alt="Customer-Centric Approach">
+                </div>
+                <div class="feature-content">
+                    <h3>Customer-Centric Approach</h3>
+                    <p>At NotASteroidStore, our customers are at the heart of everything we do. Your satisfaction is our measure of success.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/global.png}" alt="Global Inspiration">
+                </div>
+                <div class="feature-content">
+                    <h3>Global Inspiration</h3>
+                    <p>Influenced by global trends, we bring you a diverse and dynamic collection.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/empowering.png}" alt="Empowering Your Style">
+                </div>
+                <div class="feature-content">
+                    <h3>Empowering Your Style</h3>
+                    <p>Beyond PEDs, NotASteroidStore is a lifestyle. Join us on a journey of self-expression.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img th:src="@{/images/sustainable.png}" alt="Sustainable Practices">
+                </div>
+                <div class="feature-content">
+                    <h3>Sustainable Practices</h3>
+                    <p>NotASteroidStore is committed to sustainability, integrating eco-friendly practices into our production process.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-section">
+    <div class="section-header">
+        <h2>CUSTOMERS LOVE.</h2>
+        <p class="testimonials-tag">TESTIMONIALS</p>
+    </div>
+    <div class="testimonials-description">
+        <p>At NotASteroidStore, our customers are the heartbeat of our brand. Explore the heartfelt testimonials shared by those who have experienced the magic of our meds.</p>
+        <a href="#" class="btn btn-view-all">View All Testimonials</a>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-header">
+                <img th:src="@{/images/Lyfda.png}" alt="Lyftda Weith" class="testimonial-avatar">
+                <div class="testimonial-info">
+                    <h3>Lyftda Weith</h3>
+                    <p class="rating">★★★★★</p>
+                </div>
+            </div>
+            <div class="testimonial-body">
+                <p>NotASteroidStore exceeded my expectations. I got so unbelievably huge that I barely fit through the door. I NEED MOOOOORE!</p>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-header">
+                <img th:src="@{/images/140.jpeg}" alt="60+60 is 140" class="testimonial-avatar">
+                <div class="testimonial-info">
+                    <h3>60+60 is 140</h3>
+                    <p class="rating">★★★★★</p>
+                </div>
+            </div>
+            <div class="testimonial-body">
+                <p>Been taking sups from here, I gotta admit my gainz is huge, bench goes crazy and bicep pops. 10/10 imma order again</p>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-header">
+                <img th:src="@{/images/greg deucette.png}" alt="Max Steele" class="testimonial-avatar">
+                <div class="testimonial-info">
+                    <h3>Max Steele</h3>
+                    <p class="rating">★★★★★</p>
+                </div>
+            </div>
+            <div class="testimonial-body">
+                <p>There are no hard days, there is just hard workout with big weights. And remember kids, the weight is not too heavy, you are just too weak.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="section-header">
+        <h2>QUESTIONS? WE HAVE ANSWERS.</h2>
+        <p class="faq-tag">FAQ</p>
+    </div>
+    <div class="faq-description">
+        <p>Ease into the world of NotASteroidStore with clarity. Our FAQs cover a spectrum of topics, ensuring that our gymbro's mind do not work too hard to order.</p>
+    </div>
+    <div class="faq-filters">
+        <div class="category-tabs">
+            <a href="#" class="category active">All</a>
+            <a href="#" class="category">Ordering</a>
+            <a href="#" class="category">Shipping</a>
+            <a href="#" class="category">Returns</a>
+            <a href="#" class="category">Customer Support</a>
+        </div>
+    </div>
+    <div class="faq-grid">
+        <div class="faq-item">
+            <p>Can I modify my order after placing it? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>How do I initiate a return? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>How can I unsubscribe from the newsletter? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>Do you offer exchanges for products? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item open">
+            <p>How can I place an order on NotASteroidStore? <span class="faq-toggle">x</span></p>
+            <div class="faq-answer">
+                <p>Ordering is easy! Simply browse our website, add items to your cart, and proceed to checkout. Follow the prompts to enter your details and complete your purchase.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <p>What payment methods do you accept? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>How can I track my order? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>What is your shipping policy? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>Are there any additional fees for returns? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>How do I create an account on NotASteroidStore? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>Can I change my account information? <span class="faq-toggle">+</span></p>
+        </div>
+        <div class="faq-item">
+            <p>Are my personal details secure on NotASteroidStore? <span class="faq-toggle">+</span></p>
+        </div>
+    </div>
+</section>
+
+<section class="experience-section">
+    <div class="section-header">
+        <h2>SEAMLESS EXPERIENCE.</h2>
+        <p class="experience-tag">HOW IT WORKS ?</p>
+    </div>
+    <div class="experience-description">
+        <p>At NotASteroidStore, we've designed a straightforward shopping experience to make PED's accessible. We want everyone big and swole, so no matter how intellectually impaired you are, we assure that you will not fail as you usually do.</p>
+    </div>
+    <div class="steps-container">
+        <div class="step-card">
+            <h3>01</h3>
+            <div class="step-content">
+                <h4>Discover Trends</h4>
+                <p>Explore our curated collection of over 20 roids.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <h3>02</h3>
+            <div class="step-content">
+                <h4>Secure Checkout</h4>
+                <p>Add your items to the cart and proceed to our secure checkout.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <h3>03</h3>
+            <div class="step-content">
+                <h4>Swift Dispatch</h4>
+                <p>Experience 95% same-day dispatch on orders.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <h3>04</h3>
+            <div class="step-content">
+                <h4>Unbox Happiness</h4>
+                <p>Receive your carefully packaged NotASteroidStore order.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer-section">
+    <div class="footer-left">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="footer-logo">
+        <div class="subscription-form">
+            <input type="email" placeholder="Enter Your Email">
+            <button class="btn btn-subscribe">Subscribe</button>
+        </div>
+    </div>
+    <div class="footer-right">
+        <div class="footer-column">
+            <h4>Home</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestables</a></li>
+                <li><a href="#">Wiki</a></li>
+                <li><a th:href="@{/faq}">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Anabolics</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestables</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>SARMS</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestables</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Peptides</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestables</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<footer class="footer-bottom">
+    <div class="footer-links">
+        <a href="#">Terms & Conditions</a>
+        <span>|</span>
+        <a href="#">Privacy Policy</a>
+    </div>
+    <div class="social-media">
+        <a href="#"><img th:src="@{/images/facebook.png}" alt="Facebook"></a>
+        <a href="#"><img th:src="@{/images/twitter.png}" alt="Twitter"></a>
+        <a href="#"><img th:src="@{/images/instagram.png}" alt="Instagram"></a>
+    </div>
+    <div class="footer-copyright">
+        &copy; 2024 NotASteroidStore. All rights reserved.
+    </div>
+</footer>
+
+</body>
+</html>

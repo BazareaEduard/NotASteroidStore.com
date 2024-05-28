@@ -1,0 +1,440 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.newsletter-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.newsletter-header p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.newsletter-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.newsletter-header {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.2em;
+    position: relative;
+}
+
+.newsletter-header p {
+    margin: 0;
+    display: inline-block;
+    font-weight: 300;
+}
+
+.newsletter-header span {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border: 1px solid #eee;
+    border-radius: 25px;
+    padding: 8px 20px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.nav-item:hover {
+    background-color: #f7f7f7;
+    border-color: #ddd;
+}
+
+.nav-center .logo {
+    height: 50px; /* Adjust according to your logo's aspect ratio */
+}
+
+.discover-section {
+    padding: 40px 20px;
+    background-color: #fff;
+}
+
+.discover-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.discover-text {
+    max-width: 50%;
+    text-align: left;
+}
+
+.discover-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.discover-description {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.offers {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.offer-item {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.offer-item h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.offer-item p {
+    font-size: 14px;
+    color: #777;
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.category-btn {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.category-btn.active, .category-btn:hover {
+    background-color: #ffd700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.injectables-section, .digestibles-section, .most-wanted-section {
+    padding: 40px 20px;
+    background-color: #fff;
+    text-align: left;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.section-description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.product-carousel-wrapper {
+    overflow: hidden; /* Hide overflow */
+    position: relative;
+    margin-bottom: 20px;
+    padding: 0; /* Remove padding */
+    width: 100%; /* Ensure it takes the full width */
+}
+
+.product-carousel {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start; /* Align items to the start */
+    transition: transform 0.3s ease-in-out;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    width: max-content; /* Ensure the width adjusts to content */
+}
+
+.product-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    flex-shrink: 0;
+    width: 250px; /* Set a fixed width */
+    height: 350px; /* Set a fixed height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-item img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.product-item h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.product-item p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.cart-button {
+    background-color: #fff;
+    width: 40px; /* Set the width to 40px */
+    height: 40px; /* Set the height to 40px */
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-button img {
+    width: 80%; /* Adjust the image size to fit within the button */
+    height: 80%;
+}
+
+.cart-button:hover {
+    background-color: #ffd700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.carousel-button {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 0 10px;
+}
+
+.carousel-button:hover {
+    background-color: #ffd700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.slider-bar {
+    width: 100%;
+    height: 5px;
+    background-color: #ddd;
+    position: relative;
+}
+
+.slider-bar::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 25%;
+    background-color: #ffd700;
+    transition: left 0.3s;
+}
+
+.footer-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #fff;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 2; /* Extend the left side */
+    margin-right: 50px; /* Add space between the left and right sections */
+}
+
+.footer-logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.subscription-form {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Make the form take full width */
+}
+
+.subscription-form input {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px 0 0 25px;
+    outline: none;
+    font-size: 1em;
+    flex: 1; /* Allow input to take available space */
+}
+
+.btn-subscribe {
+    padding: 10px 20px;
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    border-radius: 0 25px 25px 0;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #FFC300;
+}
+
+.footer-right {
+    display: flex;
+    justify-content: space-between;
+    flex: 3; /* Adjust the flex value to balance the width */
+}
+
+.footer-column {
+    margin-left: 50px;
+}
+
+.footer-column h4 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #000;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #666;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #000;
+}
+
+.footer-links span {
+    color: #ddd;
+}
+
+.social-media {
+    display: flex;
+    align-items: center;
+}
+
+.social-media a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    border-radius: 50%;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+
+.social-media a:hover {
+    background-color: #444;
+}
+
+.social-media img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1); /* Make the icons white */
+}
+
+.footer-copyright {
+    color: #666;
+}

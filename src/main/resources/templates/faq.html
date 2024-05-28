@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Header</title>
+    <link rel="stylesheet" th:href="@{/css/faqstyles.css}" type="text/css"/>
+</head>
+<body>
+<header class="newsletter-header">
+    <p>Subscribe to our Newsletter For more reasons to pop your veins full of roids <span>&#8594;</span></p>
+</header>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}" class="nav-item">Home</a>
+        <a th:href="@{/products}" class="nav-item">Products</a>
+    </div>
+    <div class="nav-center">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="logo">
+    </div>
+    <div class="nav-right">
+        <a sec:authorize="!isAuthenticated()" href="/login" class="nav-item">Login</a>
+        <a sec:authorize="!isAuthenticated()" href="/register" class="nav-item">Register</a>
+        <a sec:authorize="isAuthenticated()" href="/logout" class="nav-item">Logout</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin" class="nav-item">Admin</a>
+        <a th:href="@{/cart}" class="nav-item">
+            <img th:src="@{/images/cart.png}" alt="Cart" class="cart-icon">
+        </a>
+        <a href="#" class="nav-item">Contact Support</a>
+    </div>
+</nav>
+
+<section class="support-section">
+    <div class="support-header">
+        <h1 class="support-title">NOTASTEROIDSTORE SUPPORT.</h1>
+        <p class="support-quote">"THERE ARE NO BIG PROBLEMS, ONLY BIG WEIGHTS."</p>
+    </div>
+    <p class="support-description">24/7 Assistance for Seamless Shopping and Unmatched Customer Satisfaction.</p>
+    <div class="support-contact">
+        <div class="contact-item">
+            <h3>Email</h3>
+            <p>support@notasteroidstore.com</p>
+        </div>
+        <div class="contact-item">
+            <h3>Call Us On</h3>
+            <p>+1 (555) 123-4567</p>
+        </div>
+        <div class="contact-item">
+            <h3>Working Hours</h3>
+            <p>Available 24/7</p>
+        </div>
+    </div>
+</section>
+
+<section class="office-locations-section">
+    <h2 class="section-title">Office Locations</h2>
+    <div class="locations">
+        <div class="location-item">
+            <h3>Come on man,</h3>
+            <p>Does this really look to you like a legitimate business?</p>
+            <div class="location-actions">
+                <button class="call-button"><img th:src="@{/images/phone.png}" alt="Call"> Call Now</button>
+                <button class="direction-button">Get Direction →</button>
+            </div>
+        </div>
+        <div class="location-item">
+            <h3>I mean come on,</h3>
+            <p>We've been practically bullying you the whole time!</p>
+            <div class="location-actions">
+                <button class="call-button"><img th:src="@{/images/phone.png}" alt="Call"> Call Now</button>
+                <button class="direction-button">Get Direction →</button>
+            </div>
+        </div>
+        <div class="location-item">
+            <h3>Still want to buy then,</h3>
+            <p>We are not going to stop you, are we?</p>
+            <div class="location-actions">
+                <button class="call-button"><img th:src="@{/images/phone.png}" alt="Call"> Call Now</button>
+                <button class="direction-button">Get Direction →</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="return-policy-section">
+    <div class="return-policy-header">
+        <h2 class="section-title">RETURN POLICY</h2>
+        <span class="return-policy-subtitle">EASY TO RETURN AT NOTASTEROIDSTORE</span>
+        <button class="read-policy-button">Read Return Policy →</button>
+    </div>
+    <p class="section-description">
+        Explore our hassle-free return policy designed to ensure your satisfaction with every purchase.
+    </p>
+    <div class="return-policy-details">
+        <div class="policy-item">
+            <h3>Eligibility</h3>
+            <p>Must be all sealed man, surely you didn't think you can send your used meds back and swindle us. We are the one who swindle.</p>
+        </div>
+        <div class="policy-item">
+            <h3>Process</h3>
+            <p>Initiate returns through our <a href="#">Return Center</a> for a smooth and efficient process.</p>
+        </div>
+        <div class="policy-item">
+            <h3>Refund</h3>
+            <p>Yeah you ain't getting none.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cancellation-policy-section">
+    <div class="cancellation-policy-header">
+        <h2 class="section-title">CANCELLATION POLICY</h2>
+        <span class="cancellation-policy-subtitle">FLEXIBLE ORDERING EXPERIENCE</span>
+        <button class="read-policy-button">Read Cancellation Policy →</button>
+    </div>
+    <p class="section-description">
+        I mean cancel all you want, we still keeping the money.
+    </p>
+    <div class="cancellation-policy-details">
+        <div class="policy-item">
+            <h3>Cancellation Window</h3>
+            <p>Orders can be canceled within 24 hours of placement for a full refund.</p>
+        </div>
+        <div class="policy-item">
+            <h3>Cancellation Process</h3>
+            <p>Visit our Order Management section to cancel your order effortlessly.</p>
+        </div>
+        <div class="policy-item">
+            <h3>Refund Timeline</h3>
+            <p>Refunds for canceled orders are processed within 5-7 business days. (Legal informed us that we should at least pretend to do refunds)</p>
+        </div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="faq-header">
+        <h2 class="section-title">QUESTIONS? WE HAVE ANSWERS.</h2>
+        <span class="faq-subtitle">FAQ</span>
+    </div>
+    <p class="section-description">
+        Ease into the world of NotASteroidStore with clarity. Our FAQs cover a spectrum of topics, ensuring you have the information you need for a seamless shopping experience.
+    </p>
+</section>
+
+<section class="faq-section">
+    <div class="faq-header">
+        <h2 class="section-title">QUESTIONS? WE HAVE ANSWERS.</h2>
+        <span class="faq-subtitle">FAQ</span>
+    </div>
+    <p class="section-description">
+        Ease into the world of NotASteroidStore with clarity. Our FAQs cover a spectrum of topics, ensuring you have the information you need for a seamless shopping experience.
+    </p>
+    <div class="faq-categories">
+        <button class="category-button active">ALL</button>
+        <button class="category-button">ORDERING</button>
+        <button class="category-button">SHIPPING</button>
+        <button class="category-button">RETURNS</button>
+        <button class="category-button">CUSTOMER SUPPORT</button>
+    </div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question">Can I modify my order after placing it? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">How do I initiate a return? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">How can I unsubscribe from the newsletter? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">Do you offer exchanges for products? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item expanded">
+            <button class="faq-question">Bro my mom caught me using steroids <span class="close-icon">×</span></button>
+            <div class="faq-answer">
+                <p>LMAO, what can she do? Punish you? You are not 14 are you? Oh no you 100% are... Teo, get Pieleanu to get us some lawyers, we may have a cease and deceit coming our way. I told you we should verify customers age, but naaah, you said it was fine. IT WAS NOT FINE :(</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">What payment methods do you accept? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">How can I track my order? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">What is your shipping policy? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">What do you mean you don't do refunds? <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">You just got my order wrong, give me my money back, I already sent you the stuff back. <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">Yeah, you are getting sued. <span class="plus-icon">+</span></button>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">You thought selling to a kid was bad, you just done goofed. BYE BYE <span class="plus-icon">+</span></button>
+        </div>
+    </div>
+</section>
+
+<footer class="footer-section">
+    <div class="footer-left">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="footer-logo">
+        <div class="subscription-form">
+            <input type="email" placeholder="Enter Your Email">
+            <button class="btn btn-subscribe">Subscribe</button>
+        </div>
+    </div>
+    <div class="footer-right">
+        <div class="footer-column">
+            <h4>Home</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestibles</a></li>
+                <li><a href="#">Wiki</a></li>
+                <li><a th:href="@{/faq}">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Anabolics</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestibles</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>SARMS</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestibles</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Peptides</h4>
+            <ul>
+                <li><a th:href="@{/products}">Injectables</a></li>
+                <li><a th:href="@{/products}">Digestibles</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<footer class="footer-bottom">
+    <div class="footer-links">
+        <a href="#">Terms & Conditions</a>
+        <span>|</span>
+        <a href="#">Privacy Policy</a>
+    </div>
+    <div class="social-media">
+        <a href="#"><img th:src="@{/images/facebook.png}" alt="Facebook"></a>
+        <a href="#"><img th:src="@{/images/twitter.png}" alt="Twitter"></a>
+        <a href="#"><img th:src="@{/images/instagram.png}" alt="Instagram"></a>
+    </div>
+    <div class="footer-copyright">
+        &copy; 2024 NotASteroidStore. All rights reserved.
+    </div>
+</footer>
+</body>
+</html>
