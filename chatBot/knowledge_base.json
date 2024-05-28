@@ -1,0 +1,48 @@
+{
+  "questions": [
+    {
+      "question": "Hello",
+      "answer": "Hey there!"
+    },
+    {
+      "question": "What are you up to?",
+      "answer": "I am here to help you out with any question"
+    },
+    {
+      "question": "Hi",
+      "answer": "Hello"
+    },
+    {
+      "question": "Who's your master?",
+      "answer": "Teodor and Eduard are my masters"
+    },
+    {
+      "question": "What can I buy from here?",
+      "answer": "You have different type of steroids. We don't encourage abusing them."
+    },
+    {
+      "question": "What do you recommend me?",
+      "answer": "Depends on the type of drug you need. Injectable or edible?"
+    },
+    {
+      "question": "Injectable",
+      "answer": "Deca is the best one according to performance and side effects."
+    },
+    {
+      "question": "Edible",
+      "answer": "Anavar is by far the best choice!"
+    },
+    {
+      "question": "What about edible?",
+      "answer": "Anavar is by far the best choice!"
+    },
+    {
+      "question": "What is your name?",
+      "answer": "SteroBot"
+    },
+    {
+      "question": "What about injectable?",
+      "answer": "Deca is the best one according to performance and side effects."
+    }
+  ]
+}

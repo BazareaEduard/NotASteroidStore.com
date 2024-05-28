@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot</title>
+    <!-- You may want to adjust the stylesheet and JavaScript sources -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+<body>
+    <h1>Chat Bot</h1>
+
+    <!-- Display area for chat messages -->
+    <div id="chatMessages"></div>
+
+    <!-- Text input for user's question -->
+    <input type="text" id="questionInput" placeholder="Ask me anything...">
+    <!-- Button to ask the question -->
+    <button onclick="askQuestion()">Ask</button>
+
+    <script>
+        function askQuestion() {
+            var questionInput = document.getElementById("questionInput");
+            var chatMessagesDiv = document.getElementById("chatMessages");
+            var question = questionInput.value.trim();
+
+            // Check if the question is not empty
+            if (question !== "") {
+                // Create a new paragraph element to display the user's question
+                var userQuestion = document.createElement("p");
+                userQuestion.textContent = "You: " + question;
+                chatMessagesDiv.appendChild(userQuestion);
+
+                // Send the question to the server to run the script
+                fetch('/run_script', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: question }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the bot's answer
+                    var botAnswer = document.createElement("p");
+                    botAnswer.textContent = "Bot: " + data.answer;
+                    chatMessagesDiv.appendChild(botAnswer);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                // Clear the question input
+                questionInput.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
