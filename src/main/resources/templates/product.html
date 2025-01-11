@@ -9,28 +9,6 @@
     <link rel="stylesheet" th:href="@{/css/productstyles.css}" type="text/css"/>
 </head>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const productName = localStorage.getItem('productName');
-        const productPrice = localStorage.getItem('productPrice');
-        let productImageSrc = localStorage.getItem('productImageSrc');
-
-        if (productName && productPrice && productImageSrc) {
-            // Check if the image path starts with , if not, prepend it
-            if (!productImageSrc.startsWith('')) {
-                productImageSrc = '' + productImageSrc;
-            }
-
-            document.querySelector('.product-details h1').textContent = productName;
-            document.querySelector('.product-details .price').textContent = productPrice;
-            document.querySelector('.product-image-container img').setAttribute('src', productImageSrc);
-            document.querySelector('.product-image-container img').setAttribute('alt', productName);
-        } else {
-            console.error('Product details not found in local storage.');
-        }
-    });
-</script>
-
 <body>
 <header class="newsletter-header">
     <p>Subscribe to our Newsletter For more reasons to pop your veins full of roids <span>&#8594;</span></p>
@@ -59,23 +37,31 @@
 <section class="product-section">
     <div class="product-container">
         <div class="product-image-container">
-            <img src="" alt="">
+            <img th:src="@{/images/{image}(image=${product.image})}" th:alt="${product.name}">
         </div>
         <div class="product-details">
             <div class="product-header">
                 <div>
-                    <h2>Digestable anabolic steroids <span class="badge">12 Left!</span></h2>
-                    <h1>Dianabol</h1>
-                    <p class="price"></p>
+                    <h2 th:utext="${product.applicationType} + ' ' + ${product.type}  + ' steroids' + ' <span class=&quot;badge&quot;>12 Left!</span>'">
+                        Digestable anabolic steroids <span class="badge">12 Left!</span>
+                    </h2>
+                    <h1 th:text="${product.name}">Product Name</h1>
+                    <p class="price" th:text="'$' + ${product.price}">Product Price</p>
                 </div>
                 <div class="product-actions">
-                    <button class="btn buy-now">Buy Now</button>
-                    <button class="btn add-to-cart">Add To Cart</button>
+                    <form th:action="@{/cart/add}" method="get" class="inline-form">
+                        <input type="hidden" name="pid" th:value="${product.id}">
+                        <button type="submit" class="btn buy-now">Buy Now</button>
+                    </form>
+                    <form th:action="@{/cart/add}" method="get" class="inline-form">
+                        <input type="hidden" name="pid" th:value="${product.id}">
+                        <button type="submit" class="btn add-to-cart">Add To Cart</button>
+                    </form>
                 </div>
             </div>
             <div class="product-description container">
                 <h3>Description</h3>
-                <p>Get ready to enhance your appearance with our in lab Anavar. Don't forget big bros buy big packs!</p>
+                <p>Get ready to enhance your appearance with our in lab <b th:utext="${product.name}"> </b>. Don't forget big bros buy big packs!</p>
             </div>
             <div class="product-options container">
                 <h3>Pack</h3>

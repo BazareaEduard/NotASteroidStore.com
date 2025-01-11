@@ -11,21 +11,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const productImages = document.querySelectorAll('.product-image');
+        const productItems = document.querySelectorAll('.product-item');
 
-        productImages.forEach(image => {
-            image.addEventListener('click', () => {
-                const productName = image.getAttribute('data-name');
-                const productPrice = image.getAttribute('data-price');
-                const productImageSrc = image.getAttribute('src');
-
-                const absoluteProductImageSrc = new URL(productImageSrc, window.location.href).href;
-
-                localStorage.setItem('productName', productName);
-                localStorage.setItem('productPrice', productPrice);
-                localStorage.setItem('productImageSrc', productImageSrc);
-
-                window.location.href = 'product';
+        productItems.forEach(item => {
+            const productImage = item.querySelector('.product-image');
+            productImage.addEventListener('click', () => {
+                const productId = item.getAttribute('data-id');
+                window.location.href = `/product/${productId}`; // Fixed URL formatting
             });
         });
     });
@@ -108,77 +100,57 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const filterButtons = document.querySelectorAll('.category, .filter');
-        const carousels = document.querySelectorAll('.product-carousel');
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterButtons = document.querySelectorAll(".category, .filter");
+        const carousels = document.querySelectorAll(".product-carousel");
 
         function filterProducts() {
-            const activeType = document.querySelector('.category.active').textContent.toLowerCase();
-            const activeCategory = document.querySelector('.filter.active').textContent.toLowerCase();
+            const activeTypeElement = document.querySelector(".category.active");
+            const activeCategoryElement = document.querySelector(".filter.active");
+
+            const activeType = activeTypeElement
+                ? activeTypeElement.getAttribute("data-application").toLowerCase()
+                : "all";
+            const activeCategory = activeCategoryElement
+                ? activeCategoryElement.getAttribute("data-category").toLowerCase()
+                : "all";
 
             carousels.forEach(carousel => {
-                const productItems = carousel.querySelectorAll('.product-item');
+                const productItems = carousel.querySelectorAll(".product-item");
 
                 productItems.forEach(item => {
-                    const itemCategory = item.getAttribute('data-category');
-                    const itemType = item.getAttribute('data-type');
+                    const itemApplication = item.getAttribute("data-application").toLowerCase();
+                    const itemCategory = item.getAttribute("data-category").toLowerCase();
 
-                    if ((activeType === 'all' || itemType === activeType) && (activeCategory === 'all' || itemCategory === activeCategory)) {
-                        item.style.display = '';
+                    // Check both application type and category filters
+                    if (
+                        (activeType === "all" || itemApplication === activeType) &&
+                        (activeCategory === "all" || itemCategory === activeCategory)
+                    ) {
+                        item.style.display = ""; // Show the item
                     } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-                // Reset the carousel position after filtering
-                const visibleItems = Array.from(productItems).filter(item => item.style.display !== 'none');
-                let currentIndex = 0;
-
-                function updateCarousel() {
-                    if (visibleItems.length > 0) {
-                        const itemWidth = visibleItems[0].offsetWidth;
-                        const gap = 20; // The gap value between items
-                        const newPosition = -(currentIndex * (itemWidth + gap));
-                        carousel.style.transition = 'transform 0.5s ease-in-out';
-                        carousel.style.transform = `translateX(${newPosition}px)`;
-                    }
-                }
-
-                updateCarousel();
-
-                const prevButton = carousel.closest('section').querySelector('.carousel-button.prev');
-                const nextButton = carousel.closest('section').querySelector('.carousel-button.next');
-
-                prevButton.addEventListener('click', () => {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        updateCarousel();
-                    }
-                });
-
-                nextButton.addEventListener('click', () => {
-                    if (currentIndex < visibleItems.length - 4) { // Adjust the 4 based on visible items
-                        currentIndex++;
-                        updateCarousel();
+                        item.style.display = "none"; // Hide the item
                     }
                 });
             });
         }
 
+        // Add click listeners to filter buttons
         filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                if (button.classList.contains('category')) {
-                    document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
-                } else if (button.classList.contains('filter')) {
-                    document.querySelectorAll('.filter').forEach(btn => btn.classList.remove('active'));
+            button.addEventListener("click", () => {
+                if (button.classList.contains("category")) {
+                    document.querySelectorAll(".category").forEach(btn => btn.classList.remove("active"));
+                } else if (button.classList.contains("filter")) {
+                    document.querySelectorAll(".filter").forEach(btn => btn.classList.remove("active"));
                 }
-                button.classList.add('active');
+                button.classList.add("active");
 
                 filterProducts();
             });
         });
 
-        filterProducts(); // Initial filter call to set the initial state
+        // Initial filter call to set the initial state
+        filterProducts();
     });
 </script>
 
@@ -253,196 +225,42 @@
     </div>
     <div class="filters-container">
         <div class="category-tabs">
-            <a href="#" class="category active">All</a>
-            <a href="#" class="category">Injectables</a>
-            <a href="#" class="category">Digestables</a>
+            <a class="category active" data-application="all">All</a>
+            <a class="category" data-application="injectable">Injectables</a>
+            <a class="category" data-application="edible">Digestables</a>
         </div>
         <div class="product-filters">
-            <a href="#" class="filter active">Anabolics</a>
-            <a href="#" class="filter">SARMS</a>
-            <a href="#" class="filter">Peptides</a>
+            <a class="filter active" data-category="anabolics">Anabolics</a>
+            <a class="filter" data-category="sarms">SARMS</a>
+            <a class="filter" data-category="peptides">Peptides</a>
         </div>
     </div>
     <div class="product-carousel-wrapper">
         <div class="product-carousel">
-            <div class="product-item" data-category="anabolics" data-type="injectables">
-                <img th:src="@{/images/deca.png}" alt="Decadron" class="product-image" data-name="Decadron" data-price="$49.99">
-                <h3>Decadron</h3>
-                <p>$49.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="injectables">
-                <img th:src="@{/images/winstrol.png}" alt="Winstrol" class="product-image" data-name="Winstrol" data-price="$39.99">
-                <h3>Winstrol</h3>
-                <p>$39.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="injectables">
-                <img th:src="@{/images/test.png}" alt="Testosterone" class="product-image" data-name="Testosterone" data-price="$29.99">
-                <h3>Testosterone</h3>
-                <p>$29.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="injectables">
-                <img th:src="@{/images/oxydrol.png}" alt="Oxydrol" class="product-image" data-name="Oxydrol" data-price="$44.99">
-                <h3>Oxydrol</h3>
-                <p>$44.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="injectables">
-                <img th:src="@{/images/boldenone.png}" alt="Oxydrol" class="product-image" data-name="Boldenone" data-price="$24.99">
-                <h3>Boldenone</h3>
-                <p>$24.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="injectables">
-                <img th:src="@{/images/dostranolonepng.png}" alt="Oxydrol" class="product-image" data-name="Dostranolonepng" data-price="$54.99">
-                <h3>Dostranolonepng</h3>
-                <p>$54.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="injectables">
-                <img th:src="@{/images/enblone.png}" alt="Oxydrol" class="product-image" data-name="Enblone" data-price="$59.99">
-                <h3>Enblone</h3>
-                <p>$59.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="injectables">
-                <img th:src="@{/images/equipose.png}" alt="Oxydrol" class="product-image" data-name="Equipose" data-price="$19.99">
-                <h3>Equipose</h3>
-                <p>$19.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="injectables">
-                <img th:src="@{/images/genericInjectable.png}" alt="Oxydrol" class="product-image" data-name="GenericInjectable" data-price="$9.99">
-                <h3>Generic Injectable</h3>
-                <p>$9.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="injectables">
-                <img th:src="@{/images/primobolanpng.png}" alt="Oxydrol" class="product-image" data-name="Primobolanpng" data-price="$44.99">
-                <h3>Primobolanpng</h3>
-                <p>$44.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="injectables">
-                <img th:src="@{/images/profina.png}" alt="Oxydrol" class="product-image" data-name="Profina" data-price="$14.99">
-                <h3>Profina</h3>
-                <p>$14.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="injectables">
-                <img th:src="@{/images/steropropican.png}" alt="Oxydrol" class="product-image" data-name="Steropropican" data-price="$94.99">
-                <h3>Steropropican</h3>
-                <p>$94.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="injectables">
-                <img th:src="@{/images/sustanon.png}" alt="Oxydrol" class="product-image" data-name="Sustanon" data-price="$17.99">
-                <h3>Sustanon</h3>
-                <p>$17.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="injectables">
-                <img th:src="@{/images/tesMix5.png}" alt="Oxydrol" class="product-image" data-name="TesMix5png" data-price="$29.99">
-                <h3>TesMix5png</h3>
-                <p>$29.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="injectables">
-                <img th:src="@{/images/testoE.png}" alt="Oxydrol" class="product-image" data-name="TestoE" data-price="$44.99">
-                <h3>TestoE</h3>
-                <p>$44.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="digestables">
-                <img th:src="@{/images/anavar.png}" alt="Anavar" class="product-image" data-name="Anavar" data-price="$199.99">
-                <h3>Anavar</h3>
-                <p>$199.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="digestables">
-                <img th:src="@{/images/dianabol__01788.png}" alt="Dianabol" class="product-image" data-name="Dianabol" data-price="$39.99">
-                <h3>Dianabol</h3>
-                <p>$39.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="digestables">
-                <img th:src="@{/images/tren.png}" alt="Trenbolone" class="product-image" data-name="Trenbolone" data-price="$89.99">
-                <h3>Trenbolone</h3>
-                <p>$89.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="digestables">
-                <img th:src="@{/images/stanabol.png}" alt="Stanobol" class="product-image" data-name="Stanobol" data-price="$29.99">
-                <h3>Stanobol</h3>
-                <p>$29.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="digestables">
-                <img th:src="@{/images/corticosteroid.png}" alt="Oxydrol" class="product-image" data-name="Corticosteroid" data-price="$24.99">
-                <h3>Corticosteroid</h3>
-                <p>$24.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="digestables">
-                <img th:src="@{/images/dexamethasone.png}" alt="Oxydrol" class="product-image" data-name="Dexamethasone" data-price="$54.99">
-                <h3>Dexamethasone</h3>
-                <p>$54.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="digestables">
-                <img th:src="@{/images/genericedible.png}" alt="Oxydrol" class="product-image" data-name="Genericedible" data-price="$59.99">
-                <h3>Genericedible</h3>
-                <p>$59.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="digestables">
-                <img th:src="@{/images/medrone.png}" alt="Oxydrol" class="product-image" data-name="Medrone" data-price="$19.99">
-                <h3>Medrone</h3>
-                <p>$19.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="digestables">
-                <img th:src="@{/images/methyprednisone.png}" alt="Oxydrol" class="product-image" data-name="Methyprednisone" data-price="$9.99">
-                <h3>Methyprednisone</h3>
-                <p>$9.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="digestables">
-                <img th:src="@{/images/prednidale.png}" alt="Oxydrol" class="product-image" data-name="Prednidale" data-price="$44.99">
-                <h3>Prednidale</h3>
-                <p>$44.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="digestables">
-                <img th:src="@{/images/prednisone.png}" alt="Oxydrol" class="product-image" data-name="Prednisone" data-price="$14.99">
-                <h3>Prednisone</h3>
-                <p>$14.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="peptides" data-type="digestables">
-                <img th:src="@{/images/unleash.png}" alt="Oxydrol" class="product-image" data-name="Unleash" data-price="$94.99">
-                <h3>Unleash the Power</h3>
-                <p>$94.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="anabolics" data-type="digestables">
-                <img th:src="@{/images/boldenone.png}" alt="Oxydrol" class="product-image" data-name="Boldenone" data-price="$24.99">
-                <h3>Boldenone</h3>
-                <p>$24.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
-            </div>
-            <div class="product-item" data-category="sarms" data-type="digestables">
-                <img th:src="@{/images/dostranolonepng.png}" alt="Oxydrol" class="product-image" data-name="Dostranolonepng" data-price="$54.99">
-                <h3>Dostranolonepng</h3>
-                <p>$54.99</p>
-                <button class="cart-button"><img th:src="@{/images/cart.png}" alt="Add to Cart"></button>
+            <!-- Dynamically loaded products -->
+            <div th:each="product : ${products}" class="product-item" th:data-id="${product.id}"
+                th:data-category="${product.type}"
+                th:data-application="${product.applicationType}">
+                <img th:src="@{/images/{image}(image=${product.image})}"
+                     th:alt="${product.name}"
+                     class="product-image">
+                <h3 th:text="${product.name}"></h3>
+                <p th:text="'$' + ${product.price}"></p>
+                <form th:action="@{/cart/add}" method="get" class="inline-form">
+                    <input type="hidden" name="pid" th:value="${product.id}">
+                    <button class="cart-button">
+                        <img th:src="@{/images/cart.png}" alt="Add to Cart">
+                    </button>
+                </form>
             </div>
         </div>
         <div class="carousel-controls">
-            <button class="carousel-button prev"><img th:src="@{/images/back.png}" alt="Previous"></button>
-            <button class="carousel-button next"><img th:src="@{/images/forward.png}" alt="Next"></button>
+            <button class="carousel-button prev">
+                <img th:src="@{/images/back.png}" alt="Previous">
+            </button>
+            <button class="carousel-button next">
+                <img th:src="@{/images/forward.png}" alt="Next">
+            </button>
         </div>
     </div>
 </section>
