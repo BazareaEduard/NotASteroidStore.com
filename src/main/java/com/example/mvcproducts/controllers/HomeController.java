@@ -3,6 +3,7 @@ package com.example.mvcproducts.controllers;
 import com.example.mvcproducts.domain.Role;
 import com.example.mvcproducts.domain.User;
 import com.example.mvcproducts.services.UserService;
+import com.example.mvcproducts.services.ProductService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,20 +18,24 @@ public class HomeController {
 
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
+  private final ProductService productService;
 
-  public HomeController(UserService userService, PasswordEncoder passwordEncoder) {
+  public HomeController(UserService userService, PasswordEncoder passwordEncoder, ProductService productService) {
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
+    this.productService = productService;
   }
 
   @RequestMapping("/")
-  public String home() {
+  public String home(Model model) {
+    model.addAttribute("products", productService.findAll());
     return "home";
   }
 
   @RequestMapping("/register")
   public String register(Model model) {
     model.addAttribute("user", new User());
+    model.addAttribute("products", productService.findAll());
     return "register.html";
   }
 

@@ -33,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Product findById(Long id) {
     Optional<Product> p = productRepository.findById(id);
+    System.out.println(p.get().toString());
     return p.get();
   }
 

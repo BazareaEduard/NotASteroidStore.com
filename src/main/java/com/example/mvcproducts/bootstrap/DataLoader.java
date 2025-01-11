@@ -24,14 +24,14 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    List<Product> productList = List.of(
-            new Product("Car", ProductType.HARDWARE, "Nice car",134000 ),
-            new Product("Computer", ProductType.HARDWARE, "Lenovo",2500 ),
-            new Product("Office", ProductType.SOFTWARE, "Office",670 ),
-            new Product("Windows", ProductType.SOFTWARE, "win",500 ),
-            new Product("Cake", ProductType.HARDWARE, "Sweet",20 )
-    );
-    productService.saveAll(productList);
+//    List<Product> productList = List.of(
+//            new Product("Car", ProductType.HARDWARE, "Nice car",134000 ),
+//            new Product("Computer", ProductType.HARDWARE, "Lenovo",2500 ),
+//            new Product("Office", ProductType.SOFTWARE, "Office",670 ),
+//            new Product("Windows", ProductType.SOFTWARE, "win",500 ),
+//            new Product("Cake", ProductType.HARDWARE, "Sweet",20 )
+//    );
+//    productService.saveAll(productList);
 
     PasswordEncoder bcrypt = new BCryptPasswordEncoder();
     User user1=new User("user1",bcrypt.encode("user1"));
